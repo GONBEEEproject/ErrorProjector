@@ -1,0 +1,2 @@
+# ErrorProjector
+Unity用エラーメッセージを空間（任意のTextComponent）に投影できるアレ
