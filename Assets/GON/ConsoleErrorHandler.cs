@@ -7,6 +7,11 @@ public class ConsoleErrorHandler : MonoBehaviour
     [SerializeField, Tooltip("ログ表示したいText")]
     private Text ErrorMessageText;
 
+    [SerializeField,Tooltip("表示したいログタイプ")]
+    private bool Error, Assert, Warning, Log, Exception = false;
+
+
+
     private void Awake()
     {
         if (ErrorMessageText == null)
@@ -17,7 +22,7 @@ public class ConsoleErrorHandler : MonoBehaviour
 
         Application.logMessageReceived += OnMessageRecieve;
 
-        //StartCoroutine(Test());
+        StartCoroutine(Test());
     }
 
     private void OnDestroy()
@@ -34,26 +39,36 @@ public class ConsoleErrorHandler : MonoBehaviour
         switch (type)
         {
             case LogType.Error:
+                if (Error == false) return;
                 log = string.Format("<color=red>{0}</color>", log);
                 stackTrace = string.Format("<color=red>{0}</color>", stackTrace);
                 outPutText = log + "\n" + stackTrace + "\n";
                 break;
             case LogType.Assert:
+                if (Assert == false) return;
+                log = string.Format("<color=red>{0}</color>", log);
+                stackTrace = string.Format("<color=red>{0}</color>", stackTrace);
+                outPutText = log + "\n" + stackTrace + "\n"; ;
+                break;
+            case LogType.Warning:
+                if (Warning == false) return;
+                log = string.Format("<color=yellow>{0}</color>", log);
+                stackTrace = string.Format("<color=yellow>{0}</color>", stackTrace);
+                outPutText = log + "\n" + stackTrace + "\n"; ;
+                break;
+            case LogType.Log:
+                if (Log == false) return;
                 log = string.Format("<color=white>{0}</color>", log);
-                outPutText = log + "\n";
+                stackTrace = string.Format("<color=white>{0}</color>", stackTrace);
+                outPutText = log + "\n" + stackTrace + "\n";
                 break;
             case LogType.Exception:
+                if (Exception == false) return;
                 log = string.Format("<color=red>{0}</color>", log);
                 stackTrace = string.Format("<color=red>{0}</color>", stackTrace);
                 outPutText = log + "\n" + stackTrace + "\n";
                 break;
-            case LogType.Warning:
-                log = string.Format("<color=yellow>{0}</color>", log);
-                stackTrace = string.Format("<color=yellow>{0}</color>", stackTrace);
-                outPutText = log + "\n";
-                break;
-            default:
-                break;
+
         }
         ErrorMessageText.text += outPutText;
     }
